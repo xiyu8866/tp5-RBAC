@@ -28,7 +28,7 @@ class Base extends Controller
             $list=$this->getTree($auth, $map);
         } else {
             //获取整个权限节点
-            $list=(new RuleModel())->where('RuleId', 'in', $rule)->where('type',1)->select()->toArray();
+            $list=(new RuleModel())->where('RuleId', 'in', $rule)->where('type', 1)->select()->toArray();
             foreach ($list as $k=>$v) {
                 if ($v['pid']==0) {
                     $auth[]=$v;
@@ -36,9 +36,9 @@ class Base extends Controller
             }
             $rule=explode(',', $rule);
             //当前 节点 的id
-            $ruId=(new RuleModel())->where('rules',$controller.'/'.$action)->value('ruleId');
+            $ruId=(new RuleModel())->where('rules', $controller.'/'.$action)->value('ruleId');
             //判断当前角色是否有权限访问该方法
-            if(!in_array($ruId,$rule)){
+            if (!in_array($ruId, $rule)) {
                 $this->redirect('/error/error.html');
             }
             //获取左侧树状导航
@@ -66,7 +66,7 @@ class Base extends Controller
             $list[$k]['child']=$info;
             foreach ($info as $key=>$val) {
                 $map['pid']=$v['RuleId'];
-                $is_id=$db->where('pid',$val['RuleId'])->value('RuleId');
+                $is_id=$db->where('pid', $val['RuleId'])->value('RuleId');
                 if ($is_id) {
                     $list[$k]['child'] = $this->getTree($info, $map);
                 }

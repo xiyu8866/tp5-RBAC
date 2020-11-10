@@ -2,6 +2,8 @@
 namespace app\admin\controller;
 
 use app\admin\model\AdminModel;
+use think\Db;
+use think\facade\App;
 
 class Index extends Base
 {
@@ -11,6 +13,9 @@ class Index extends Base
     }
     public function welcome()
     {
+        $version = Db::query("select version() as ver");
+        $mysql_version =  $version[0]['ver'];
+        $this->assign(["mysql_version"=> $mysql_version,'tp_version'=>App::version()]);
         return view('welcome');
     }
     public function switchLogin()
@@ -22,7 +27,7 @@ class Index extends Base
         $data=request()->post();
         $db=new AdminModel();
         $info=$db->where('user', trim($data['username']))->find();
-        if($info['status']!=1){
+        if ($info['status']!=1) {
             return json(['code'=>0,'msg'=>'用户已停用']);
         }
         if (!$info) {
